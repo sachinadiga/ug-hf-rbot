@@ -7,10 +7,9 @@ from dotenv import load_dotenv
 from app.clients.hf_pipeline_local import HFPipelineLocalClient
 from app.core.bot import ResilienceBot
 from app.llm.safe_wrapper import safe_generate
-from app.rag.retriever import LocalRetriever
 
 
-def main() -> None:
+def main():
     load_dotenv()
 
     if len(sys.argv) < 2:
@@ -21,8 +20,7 @@ def main() -> None:
     app_start = time.perf_counter()
 
     client = HFPipelineLocalClient()
-    retriever = LocalRetriever()
-    bot = ResilienceBot(client, retriever=retriever)
+    bot = ResilienceBot(client)
 
     def bot_generate(
         prompt: str,
@@ -45,7 +43,7 @@ def main() -> None:
 
     total_latency_ms = int((time.perf_counter() - app_start) * 1000)
 
-    print("\nResilienceBot (RAG):\n")
+    print("\nResilienceBot:\n")
     print(result.answer)
     print("\n---")
     print(f"Success: {result.success}")
